@@ -10,8 +10,8 @@ The RSA operations for encryption and decryption involve modular exponentiation:
   * _d_: Private Exponent
   * _M_: modulo
 
-  - _C = P<sup>e</sup> mod N_   (encrypt with public key)
-  - _P = C<sup>d</sup> mod N_   (decrypt with private key)
+  - _C = P<sup>e</sup> mod M_   (encrypt with public key)
+  - _P = C<sup>d</sup> mod M_   (decrypt with private key)
   
   The public key is (_e_,_M_) and the private key is (_d_,_M_).
 
@@ -36,4 +36,32 @@ The requirements for _e_ are:
 ### Generaion of Private Exponent (d)
 The private exponent is generated from primes _p_ and _q_ and the public exponent.
 * _d_ = _e_-1 mod (_p_ - 1) * (_q_ - 1)
+
+## Efficient Modular Exponentiation (using Montgomery Multiplication)
+The multiply and square algorithm for Modular Exponentiation requires modular multiplication in the forms:
+  - _Z = X * X mod M_
+  - _Z = X * Y mod M_
+
+This operation requires expensive multiplication and division operations. 
+Montgomery Multiplication converts parameters into modular residues wherein multiplication becomes addition and division becomes a bitwise shift.
+
+Modular residues require a pre computed value (R), related to the size of the modulus (_M_):
+* _R = 2<sup>2m</sup> mod M_, where _m_ = # bits of in the modulus (_M_)
+
+The bitwise Montgomery Multiplication algorithm uses the equation:
+* X (residue) = X * _R_<sup>2m</sup> * (_R_<sup>-1</sup>) mod _M_ 
+
+This bitwise algorithm internally calculates the modular inverse (R<sup>-1</sup>). 
+The modular inverse is defined as R<sup>-1</sup> where R * R<sup>-1</sup> mod _M_ = 1.
+
+
+![](https://github.com/tsalomon/EmbeddedMontgomeryRSA/raw/master/Montgomery%20Multiplication%20-%20UML%20swimlane.png)
+
+## Optimization Results
+
+| Key Size | Auto Opt. CPU Time (sec)     | All Opt.  | Optimization (%) |
+| --------:|:-------------:|:-----:|:-----:|
+| 512      | 2.42 | 0.53 | 78.1 |
+| 1024     | 9.58 | 2.05 | 78.6 |
+| 2048     | 38.49| 8.27 | 78.5 |
 
