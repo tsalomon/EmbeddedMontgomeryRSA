@@ -46,7 +46,7 @@ This operation requires expensive multiplication and division operations.
 Montgomery Multiplication converts parameters into modular residues wherein multiplication becomes addition and division becomes a bitwise shift.
 
 Modular residues require a pre computed value (R), related to the size of the modulus (_M_):
-* _R = 2<sup>2m</sup> mod M_, where _m_ = # bits of in the modulus (_M_)
+* _R<sup>2m</sup> = 2<sup>2m</sup> mod M_, where _m_ = # bits of in the modulus (_M_)
 
 The bitwise Montgomery Multiplication algorithm uses the equation:
 * X (residue) = X * _R_<sup>2m</sup> * (_R_<sup>-1</sup>) mod _M_ 
